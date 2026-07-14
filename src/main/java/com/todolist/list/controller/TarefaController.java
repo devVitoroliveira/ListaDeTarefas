@@ -3,7 +3,6 @@ package com.todolist.list.controller;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,20 +30,21 @@ public class TarefaController {
         this.tarefaService = tarefaService;
     }
 
-    @PostMapping
+    @PostMapping // (404, 405, 500, 400, campos desc e nome não devem ter números, nem caracteres
+                 // aleatórios)
     public ResponseEntity<List<TarefaModel>> createTarefa(@RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> savedTarefas = tarefaService.saveTarefa(tarefaRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTarefas);
 
     }
 
-    @GetMapping
+    @GetMapping // (404,500)
     public ResponseEntity<List<TarefaModel>> getAllTarefas() {
         List<TarefaModel> tarefas = tarefaService.getAllTarefas();
         return ResponseEntity.ok(tarefas);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // (404,500)
     public ResponseEntity<List<TarefaModel>> getTarefaById(@PathVariable UUID id) {
         List<TarefaModel> tarefa = tarefaService.getTarefaById(id);
         if (tarefa.isEmpty()) {
@@ -53,7 +53,8 @@ public class TarefaController {
         return ResponseEntity.ok(tarefa);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") // (404, 405, 500, 400, campos desc e nome não devem ter números, nem caracteres
+                         // aleatórios)
     public ResponseEntity<List<TarefaModel>> updateTarefa(@PathVariable UUID id,
             @RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> updatedTarefa = tarefaService.updateTarefa(id, tarefaRecordDto);
@@ -63,7 +64,7 @@ public class TarefaController {
         return ResponseEntity.ok(updatedTarefa);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") // (404, 405, 500, 400)
     public ResponseEntity<List<TarefaModel>> deleteTarefa(@PathVariable UUID id) {
         List<TarefaModel> deletedTarefa = tarefaService.deleteTarefa(id);
         if (deletedTarefa.isEmpty()) {
