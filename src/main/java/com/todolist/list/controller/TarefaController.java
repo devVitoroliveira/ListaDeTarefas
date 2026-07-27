@@ -3,6 +3,11 @@ package com.todolist.list.controller;
 import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.list.dto.TarefaRecordDto;
 import com.todolist.list.model.TarefaModel;
+import com.todolist.list.model.TarefaModelAssembler;
 import com.todolist.list.service.TarefaService;
 
 import jakarta.validation.Valid;
@@ -25,46 +31,48 @@ import jakarta.validation.Valid;
 public class TarefaController {
 
     private final TarefaService tarefaService;
+    private final TarefaModelAssembler assembler;
 
-    public TarefaController(TarefaService tarefaService) {
+    public TarefaController(TarefaService tarefaService, TarefaModelAssembler tarefaModelAssembler) {
         this.tarefaService = tarefaService;
+        this.assembler = tarefaModelAssembler;
     }
 
-    @PostMapping // (404, 405, 500, 400, campos desc e nome não devem ter números, nem caracteres
-                 // aleatórios)
-    public ResponseEntity<List<TarefaModel>> createTarefa(@RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
+    @PostMapping
+    public ResponseEntity<EntityModel<TarefaModel>> createTarefa(@RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> savedTarefas = tarefaService.saveTarefa(tarefaRecordDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedTarefas);
-
+        EntityModel<TarefaModel> entityModel = assembler.toModel(savedTarefas.get(0));
+        entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
-    @GetMapping // (404,500)
-    public ResponseEntity<List<TarefaModel>> getAllTarefas() {
+    @GetMapping
+    public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> getAllTarefas() {
         List<TarefaModel> tarefas = tarefaService.getAllTarefas();
-        return ResponseEntity.ok(tarefas);
+        CollectionModel<EntityModel<TarefaModel>> collection = assembler.toCollectionModel(tarefas);
+        collection.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withSelfRel());
+        collection.add(linkTo(methodOn(TarefaController.class).createTarefa(null)).withRel("create-tarefa"));
+        return ResponseEntity.ok(collection);
     }
 
     @GetMapping("/{id}") // (404,500)
-    public ResponseEntity<List<TarefaModel>> getTarefaById(@PathVariable UUID id) {
+    public ResponseEntity<EntityModel<TarefaModel>> getTarefaById(@PathVariable UUID id) {
         List<TarefaModel> tarefa = tarefaService.getTarefaById(id);
-        if (tarefa.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(tarefa);
+        EntityModel<TarefaModel> entityModel = assembler.toModel(tarefa.get(0));
+        entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
+        return ResponseEntity.ok(entityModel);
     }
 
-    @PutMapping("/{id}") // (404, 405, 500, 400, campos desc e nome não devem ter números, nem caracteres
-                         // aleatórios)
-    public ResponseEntity<List<TarefaModel>> updateTarefa(@PathVariable UUID id,
+    @PutMapping("/{id}")
+    public ResponseEntity<EntityModel<TarefaModel>> updateTarefa(@PathVariable UUID id,
             @RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> updatedTarefa = tarefaService.updateTarefa(id, tarefaRecordDto);
-        if (updatedTarefa.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedTarefa);
+        EntityModel<TarefaModel> entityModel = assembler.toModel(updatedTarefa.get(0));
+        entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
+        return ResponseEntity.ok(entityModel);
     }
 
-    @DeleteMapping("/{id}") // (404, 405, 500, 400)
+    @DeleteMapping("/{id}")
     public ResponseEntity<List<TarefaModel>> deleteTarefa(@PathVariable UUID id) {
         List<TarefaModel> deletedTarefa = tarefaService.deleteTarefa(id);
         if (deletedTarefa.isEmpty()) {

@@ -3,6 +3,8 @@ package com.todolist.list.model;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tarefas")
-public class TarefaModel implements Serializable {
+public class TarefaModel extends RepresentationModel<TarefaModel> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
