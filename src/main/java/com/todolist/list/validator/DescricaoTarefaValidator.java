@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
+//Hifen e barra, hora, unidade só usar para data/hora/unidade
 public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTarefaValido, String> {
 
     // Caracteres proibidos
@@ -25,7 +25,10 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
     private static final Pattern MISTURA_LETRA_DIGITO = Pattern.compile("\\p{L}\\d|\\d\\p{L}");
 
     // Pontuação sem espaço
-    private static final Pattern PONTUACAO_SEM_ESPACO = Pattern.compile("[,;:](?=\\p{L})");
+    private static final Pattern PONTUACAO_SEM_ESPACO = Pattern.compile("[.,;:](?=\\p{L})");
+
+    // Letra única
+    private static final Pattern LETRA_UNICA = Pattern.compile("^[\\p{L}]$");
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -45,7 +48,7 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
         if (value.matches("^\\d.*")) {
 
             String primeiraPalavra = value.split("\\s+")[0];
-            if (!isPalavraPermitida(primeiraPalavra)) {
+            if (!isDataHoraUnidade(primeiraPalavra)) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(
                         "A descrição começa com número em formato inválido. Use data (dd-mm-aaaa ou dd/mm/aaaa), hora (10h, 10:30) ou número com unidade (2kg, 5m).")
@@ -56,7 +59,7 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
         // Verificação 1.5: Termino com número
         if (value.matches(".*\\d$")) {
             String ultimaPalavra = value.split("\\s+")[value.split("\\s+").length - 1];
-            if (!isPalavraPermitida(ultimaPalavra)) {
+            if (!isDataHoraUnidade(ultimaPalavra)) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(
                         "A descrição termina com número em formato inválido. Use data (dd-mm-aaaa ou dd/mm/aaaa), hora (10h, 10:30) ou número com unidade (2kg, 5m).")
@@ -64,11 +67,12 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
                 return false;
             }
         }
-
+        
+        
         // Verificação 2: para cada palavra, checar se contém mistura letra-dígito
         // proibida
-        String[] palavras = value.split("\\s+");
-        for (String palavra : palavras) {
+        String[] palavrasMistura = value.split("\\s+");
+        for (String palavra : palavrasMistura) {
             // Se a palavra inteira é válida (data, hora, unidade), ignoramos a verificação
             // de mistura
             if (isPalavraPermitida(palavra))
@@ -94,12 +98,30 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
         }
         // Verificação 3.5: pontuação no início/final
         if (value.startsWith(",") || value.startsWith(";") || value.startsWith(":") ||
-                value.endsWith(",") || value.endsWith(";") || value.endsWith(":")) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("A descrição começa ou termina com pontuação inválida.")
-                    .addConstraintViolation();
-            return false;
-        }
+               value.startsWith(".") || value.endsWith(",") || value.endsWith(";") || value.endsWith(":")) {
+                   context.disableDefaultConstraintViolation();
+                   context.buildConstraintViolationWithTemplate("A descrição começa ou termina com pontuação inválida.")
+                   .addConstraintViolation();
+                   return false;
+                }
+
+                // Verificação 3.6: Verificar se a pontuação de data/hora/unidade é usada corretamente
+                String[] palavras = value.split("\\s+");
+                for (String palavra : palavras) {
+                    if(!isPossivelDataHoraUnidade(palavra)){
+                        continue;
+                    } else{
+                        if (!isDataHoraUnidade(palavra)) {
+                       context.disableDefaultConstraintViolation();
+                       context.buildConstraintViolationWithTemplate(
+                               "A descrição contém data/hora/unidade em formato inválido. Use data (dd-mm-aaaa ou dd/mm/aaaa), hora (10h, 10:30) ou número com unidade (2kg, 5m).")
+                               .addConstraintViolation();
+                       return false;
+                   }
+                    }
+                   
+                    }
+                
 
         // Verificação 4: espaços em excesso
         if (value.contains("  ")) {
@@ -116,6 +138,13 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
                     .addConstraintViolation();
             return false;
         }
+        // Verificação 6: letra única
+        if (LETRA_UNICA.matcher(value).matches()) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("A descrição deve conter mais de uma letra.")
+                    .addConstraintViolation();
+            return false;
+        }
 
         return true;
     }
@@ -127,5 +156,16 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
                 HORA.matcher(palavra).matches() ||
                 NUMERO_UNIDADE.matcher(palavra).matches();
     }
-
+   private boolean isDataHoraUnidade(String palavra) {
+        return DATA_HIFEN.matcher(palavra).matches() ||
+                DATA_BARRA.matcher(palavra).matches() ||
+                HORA.matcher(palavra).matches() ||
+                NUMERO_UNIDADE.matcher(palavra).matches();
+    }
+    private boolean palavraSuspeita(String palavra){
+        return MISTURA_LETRA_DIGITO.matcher(palavra).find() || PONTUACAO_SEM_ESPACO.matcher(palavra).find() || palavra.contains("  ") || palavra.startsWith(" ") || palavra.endsWith(" ") || LETRA_UNICA.matcher(palavra).matches();
+    }
+    private boolean isPossivelDataHoraUnidade(String palavra) {
+        return palavra.matches(".*\\d.*") || palavra.matches(".*[h/:].*") || palavra.matches(".*(kg|g|m|cm|un|L).*");
+    }
 }

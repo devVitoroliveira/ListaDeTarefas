@@ -19,7 +19,7 @@ public class NomeTarefaValidator implements ConstraintValidator<NomeTarefaValido
         if (!LETRAS_ESPACOS.matcher(value).matches()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
-                    "O nome da tarefa deve conter apenas letras (com acentos) e espaços. Números e símbolos não são permitidos.")
+                    "O nome da tarefa deve conter apenas letras (com acentos) e espaços. Números e símbolos e pontuação não são permitidos.")
                     .addConstraintViolation();
             return false;
         }
@@ -31,7 +31,21 @@ public class NomeTarefaValidator implements ConstraintValidator<NomeTarefaValido
                     .addConstraintViolation();
             return false;
         }
-
+        if(value.contains("  "))
+        {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    "O nome da tarefa contém espaços em excesso.")
+                    .addConstraintViolation();
+            return false;
+        }
+        if(value.startsWith(" ") || value.endsWith(" ")) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    "O nome da tarefa contém espaços no início/final.")
+                    .addConstraintViolation();
+            return false;
+        }
         return true;
     }
 }
