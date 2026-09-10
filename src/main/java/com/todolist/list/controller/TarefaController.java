@@ -24,10 +24,12 @@ import com.todolist.list.model.TarefaModel;
 import com.todolist.list.model.TarefaModelAssembler;
 import com.todolist.list.service.TarefaService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tarefa")
+@Tag(name = "Tarefa", description = "API para gerenciamento de tarefas")
 public class TarefaController {
 
     private final TarefaService tarefaService;
