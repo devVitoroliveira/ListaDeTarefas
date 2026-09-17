@@ -19,11 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.todolist.list.configuration.ApiStandardErrors;
 import com.todolist.list.dto.TarefaRecordDto;
+import com.todolist.list.dto.TarefaResponseDto;
 import com.todolist.list.model.TarefaModel;
 import com.todolist.list.model.TarefaModelAssembler;
 import com.todolist.list.service.TarefaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -51,15 +57,24 @@ public class TarefaController {
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> getAllTarefas() {
         List<TarefaModel> tarefas = tarefaService.getAllTarefas();
+        if (tarefas.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         CollectionModel<EntityModel<TarefaModel>> collection = assembler.toCollectionModel(tarefas);
         collection.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withSelfRel());
         collection.add(linkTo(methodOn(TarefaController.class).createTarefa(null)).withRel("create-tarefa"));
         return ResponseEntity.ok(collection);
     }
 
-    @GetMapping("/{id}") // (404,500)
+    @Operation(summary = "Busca uma tarefa pelo ID", description = "Retorna os detalhes de uma tarefa específica com base no ID fornecido")
+    @ApiResponse(responseCode = "200", description = "Tarefa encontrada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiStandardErrors
+    @GetMapping("/{id}")
     public ResponseEntity<EntityModel<TarefaModel>> getTarefaById(@PathVariable UUID id) {
         List<TarefaModel> tarefa = tarefaService.getTarefaById(id);
+        if (tarefa.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         EntityModel<TarefaModel> entityModel = assembler.toModel(tarefa.get(0));
         entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
         return ResponseEntity.ok(entityModel);
@@ -69,6 +84,9 @@ public class TarefaController {
     public ResponseEntity<EntityModel<TarefaModel>> updateTarefa(@PathVariable UUID id,
             @RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> updatedTarefa = tarefaService.updateTarefa(id, tarefaRecordDto);
+        if (updatedTarefa.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
         EntityModel<TarefaModel> entityModel = assembler.toModel(updatedTarefa.get(0));
         entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
         return ResponseEntity.ok(entityModel);

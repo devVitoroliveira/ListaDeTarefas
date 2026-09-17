@@ -31,15 +31,14 @@ public class NomeTarefaValidator implements ConstraintValidator<NomeTarefaValido
                     .addConstraintViolation();
             return false;
         }
-        if(value.contains("  "))
-        {
+        if (value.contains("  ")) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
                     "O nome da tarefa contém espaços em excesso.")
                     .addConstraintViolation();
             return false;
         }
-        if(value.startsWith(" ") || value.endsWith(" ")) {
+        if (value.startsWith(" ") || value.endsWith(" ")) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(
                     "O nome da tarefa contém espaços no início/final.")

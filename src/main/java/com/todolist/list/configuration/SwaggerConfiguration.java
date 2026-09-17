@@ -12,10 +12,9 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-        .info(new Info()
-    .title("Lista de Tarefas")
-.version("1.0.0")
-.description("Documentação da Lista de Tarefas API"));
-        
+                .info(new Info()
+                        .title("Lista de Tarefas")
+                        .version("1.0.0")
+                        .description("Documentação da Lista de Tarefas API"));
     }
 }
