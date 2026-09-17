@@ -24,8 +24,8 @@ public class TarefaService {
     public List<TarefaModel> saveTarefa(TarefaRecordDto tarefa) {
         var tarefaModel = new TarefaModel();
         BeanUtils.copyProperties(tarefa, tarefaModel);
-        tarefaRepository.save(tarefaModel);
-        return List.of(tarefaModel);
+        TarefaModel savedTarefa = tarefaRepository.save(tarefaModel);
+        return List.of(savedTarefa);
     }
 
     public List<TarefaModel> getAllTarefas() {

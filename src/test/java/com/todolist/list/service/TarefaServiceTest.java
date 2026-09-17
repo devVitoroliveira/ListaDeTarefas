@@ -47,10 +47,7 @@ public class TarefaServiceTest {
         tarefaModel.setRealizado(tarefaRecordDto.realizado());
         tarefaModel.setPrioridade(tarefaRecordDto.prioridade());
 
-        List<TarefaModel> tarefas = List.of(tarefaModel);
-
         when(tarefaRepository.save(any(TarefaModel.class))).thenReturn(tarefaModel);
-        when(tarefaRepository.findAll(any(Sort.class))).thenReturn(tarefas);
 
         List<TarefaModel> savedTarefas = tarefaService.saveTarefa(tarefaRecordDto);
 
@@ -58,7 +55,6 @@ public class TarefaServiceTest {
         assertThat(savedTarefas.get(0).getNome()).isEqualTo("Tarefa 1");
         assertThat(savedTarefas.get(0).getId()).isNotNull();
         verify(tarefaRepository).save(any(TarefaModel.class));
-        verify(tarefaRepository).findAll(any(Sort.class));
         verifyNoMoreInteractions(tarefaRepository);
     }
 

@@ -31,12 +31,13 @@ import com.todolist.list.dto.TarefaRecordDto;
 import com.todolist.list.model.TarefaModel;
 import com.todolist.list.model.TarefaModelAssembler;
 import com.todolist.list.service.TarefaService;
+
 @WebMvcTest(TarefaController.class)
 public class TarefaControllerTest {
 
         @Autowired
         private TarefaController tarefaController;
-        
+
         @Autowired
         private MockMvc mockMvc;
 
@@ -50,9 +51,9 @@ public class TarefaControllerTest {
         private TarefaModelAssembler tarefaModelAssembler;
 
         private TarefaRecordDto tarefaRecordDto;
-        
+
         private TarefaRecordDto tarefaRecordDtoatualizado;
-        
+
         private String jsonPost;
 
         private String jsonPut;
@@ -75,15 +76,15 @@ public class TarefaControllerTest {
                                 .prioridade(3)
                                 .build();
                 jsonPost = objectMapper.writeValueAsString(tarefaRecordDto);
-               
-                                tarefaRecordDtoatualizado = TarefaRecordDto.builder()
+
+                tarefaRecordDtoatualizado = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste Atualizada")
                                 .descricao("Descrição da Tarefa Teste Atualizada")
                                 .realizado(true)
                                 .prioridade(2)
                                 .build();
                 jsonPut = objectMapper.writeValueAsString(tarefaRecordDtoatualizado);
-                                
+
         }
 
         @Test
@@ -123,6 +124,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando for nulo ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoNomeNuloEmPost() throws Exception {
@@ -142,6 +144,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando não contém apenas letras e espaços ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoNomeNaoContemApenasLetrasEEspacosEmPost() throws Exception {
@@ -161,6 +164,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém apenas uma letra ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoNomeContemApenasUmaLetraEmPost() throws Exception {
@@ -180,6 +184,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém espaços em excesso ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoNomeContemEspacosEmExcessoEmPost() throws Exception {
@@ -199,6 +204,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém espaços no início ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoNomeContemEspacosNoInicioEmPost() throws Exception {
@@ -218,6 +224,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém espaços no final ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoNomeContemEspacosNoFinalEmPost() throws Exception {
@@ -237,6 +244,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo prioridade quando for inválido ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoPrioridadeEmPost() throws Exception {
@@ -256,6 +264,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo prioridade quando for nulo ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoPrioridadeNuloEmPost() throws Exception {
@@ -295,6 +304,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descricao quando for nulo ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoNuloEmPost() throws Exception {
@@ -314,6 +324,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descricao quando não contém apenas letras, números, espaços, pontuação básica (.,;:), hífen e barra ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoNaoContemApenasCaracteresValidosEmPost() throws Exception {
@@ -333,6 +344,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descricao quando termina com pontuação inválida ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoTerminaComPontuacaoInvalidaEmPost() throws Exception {
@@ -352,6 +364,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descricao quando começa com pontuação inválida ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoComecaComPontuacaoInvalidaEmPost() throws Exception {
@@ -371,6 +384,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descricao quando contém mistura letra-dígito proibida ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoMisturaLetraDigitoEmPost() throws Exception {
@@ -390,6 +404,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descricao quando contém pontuação sem espaço ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoPontuacaoSemEspacoEmPost() throws Exception {
@@ -409,7 +424,8 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando começa com espaço ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoComecaComEspacoAoSalvarTarefaEmPost() throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
@@ -428,7 +444,8 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando termina com espaço ao salvar tarefa em post")
         public void deveRetornarErroValidacaoNoCampoDescricaoTerminaComEspacoAoSalvarTarefaEmPost() throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
@@ -447,9 +464,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando contém espaços em excesso ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoContemEspacosEmExcessoAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoContemEspacosEmExcessoAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Descrição da  Tarefa Teste") // Descrição inválida(o campo não pode conter espaços em excesso)
@@ -466,9 +485,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando contém apenas uma letra ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoContemApenasUmaLetraAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoContemApenasUmaLetraAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("T") // Descrição inválida(o campo deve ter no mínimo 2 caracteres)
@@ -485,9 +506,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de data DD/MM/AAAA for inválido ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoDataInvalidoComBarrasAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoDataInvalidoComBarrasAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Descrição da Tarefa Teste no dia 22/02/22") // Descrição com data inválida(o campo deve conter data no formato DD/MM/AAAA)
@@ -504,9 +527,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de data DD-MM-AAAA for inválido ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoDataInvalidoComHifenAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoDataInvalidoComHifenAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Descrição da Tarefa Teste no dia 22-02-22") // Descrição com data inválida(o campo deve conter data no formato DD-MM-AAAA)
@@ -523,9 +548,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de hora HH:MM for inválido ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoComPontoAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoComPontoAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Descrição da Tarefa Teste no dia 22/02/2022 às 10;10") // Descrição com hora inválida(o campo deve conter hora no formato HH:MM)
@@ -542,9 +569,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de hora HHhMM for inválido ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Descrição da Tarefa Teste no dia 22/02/2022 às 10h30 am") // Descrição com hora inválida(o campo deve conter hora no formato HHhMM)
@@ -561,9 +590,11 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de unidade for inválido ao salvar tarefa em post")
-        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoUnidadeInvalidoAoSalvarTarefaEmPost() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoFormatoUnidadeInvalidoAoSalvarTarefaEmPost()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Testando a descrição da tarefa com unidade 2 kg") // Descrição com unidade inválida(o campo deve conter unidade no formato correto, como "2kg")
@@ -637,11 +668,13 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar a lista de tarefas com status 200 quando for bem sucedido em getAll")
         public void deveRetornarListaDeTarefasEmGetAll() throws Exception {
                 when(tarefaService.getAllTarefas()).thenReturn(List.of(tarefaModel));
-                when(tarefaModelAssembler.toCollectionModel(List.of(tarefaModel))).thenReturn(CollectionModel.of(List.of(EntityModel.of(tarefaModel))));
+                when(tarefaModelAssembler.toCollectionModel(List.of(tarefaModel)))
+                                .thenReturn(CollectionModel.of(List.of(EntityModel.of(tarefaModel))));
 
                 mockMvc.perform(get(url)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -654,10 +687,12 @@ public class TarefaControllerTest {
                 verify(tarefaModelAssembler).toCollectionModel(List.of(tarefaModel));
                 verifyNoMoreInteractions(tarefaService, tarefaModelAssembler);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar tarefa não encontrada com status 404 quando não houver tarefas cadastradas em getAll")
         public void deveRetornarTarefaNaoEncontradaEmGetAll() throws Exception {
                 when(tarefaService.getAllTarefas()).thenReturn(List.of());
+                when(tarefaModelAssembler.toCollectionModel(List.of())).thenReturn(CollectionModel.of(List.of()));
 
                 mockMvc.perform(get(url)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -668,6 +703,7 @@ public class TarefaControllerTest {
                 verify(tarefaService).getAllTarefas();
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar recurso não encontrado com status 404 quando a URL estiver incorreta em getAll")
         public void deveRetornarRecursoNaoEncontradoQuandoUrlEstiverIncorretaEmGetAll() throws Exception {
@@ -679,6 +715,7 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar uma tarefa da lista de tarefas com status 200 quando for bem sucedido em getById")
         public void deveRetornarTarefa() throws Exception {
@@ -696,7 +733,8 @@ public class TarefaControllerTest {
                 verify(tarefaModelAssembler).toModel(tarefaModel);
                 verifyNoMoreInteractions(tarefaService, tarefaModelAssembler);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar tarefa não encontrada com status 404 quando não houver tarefa cadastrada com o ID informado em getById")
         public void deveRetornarTarefaNaoEncontradaEmGetById() throws Exception {
                 when(tarefaService.getTarefaById(id)).thenReturn(List.of());
@@ -710,6 +748,7 @@ public class TarefaControllerTest {
                 verify(tarefaService).getTarefaById(id);
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar recurso não encontrado com status 404 quando a URL estiver incorreta em getById")
         public void deveRetornarRecursoNaoEncontradoQuandoUrlEstiverIncorretaEmGetById() throws Exception {
@@ -721,10 +760,12 @@ public class TarefaControllerTest {
 
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar parâmetro inválido com status 400 quando a URL estiver incorreta em getById")
         public void deveRetornarParametroInvalidoQuandoUrlEstiverIncorretaEmGetById() throws Exception {
-                mockMvc.perform(get("/tarefa/abc") // URL incorreta(não existe mapeamento para essa URL com parâmetro não numérico)
+                mockMvc.perform(get("/tarefa/abc") // URL incorreta(não existe mapeamento para essa URL com parâmetro
+                                // não numérico)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonPost)
                                 .accept(MediaType.APPLICATION_JSON))
@@ -732,15 +773,19 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar tarefa atualizada com status 200 quando for bem sucedido em update")
         public void deveRetornarTarefaAtualizadaEmUpdateTarefa() throws Exception {
-               
-                TarefaModel tarefaModelAtualizado = new TarefaModel(tarefaRecordDtoatualizado.nome(), tarefaRecordDtoatualizado.descricao(),
+
+                TarefaModel tarefaModelAtualizado = new TarefaModel(tarefaRecordDtoatualizado.nome(),
+                                tarefaRecordDtoatualizado.descricao(),
                                 tarefaRecordDtoatualizado.realizado(), tarefaRecordDtoatualizado.prioridade());
 
-                when(tarefaService.updateTarefa(id, tarefaRecordDtoatualizado)).thenReturn(List.of(tarefaModelAtualizado));
-                when(tarefaModelAssembler.toModel(tarefaModelAtualizado)).thenReturn(EntityModel.of(tarefaModelAtualizado));
+                when(tarefaService.updateTarefa(id, tarefaRecordDtoatualizado))
+                                .thenReturn(List.of(tarefaModelAtualizado));
+                when(tarefaModelAssembler.toModel(tarefaModelAtualizado))
+                                .thenReturn(EntityModel.of(tarefaModelAtualizado));
 
                 mockMvc.perform(put("/tarefa/" + id)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -757,7 +802,8 @@ public class TarefaControllerTest {
                 verify(tarefaModelAssembler).toModel(tarefaModelAtualizado);
                 verifyNoMoreInteractions(tarefaService, tarefaModelAssembler);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar tarefa não encontrada com status 404 ao atualizar uma tarefa com ID válido que não existe")
         public void deveRetornarTarefaNaoEncontradaQuandoUrlEstiverIncorretaEmUpdateTarefa() throws Exception {
                 when(tarefaService.updateTarefa(id, tarefaRecordDtoatualizado)).thenReturn(List.of());
@@ -771,6 +817,7 @@ public class TarefaControllerTest {
                 verify(tarefaService).updateTarefa(id, tarefaRecordDtoatualizado);
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando estiver vazio ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeEmUpdateTarefa() throws Exception {
@@ -790,6 +837,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando estiver nulo ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeNuloEmUpdateTarefa() throws Exception {
@@ -809,6 +857,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando não contém apenas letras e espaços ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeNaoContemApenasLetrasEspacosEmUpdateTarefa() throws Exception {
@@ -828,6 +877,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retonar erro de validação com status 400 no campo nome quando contém apenas uma letra ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeContemApenasUmaLetraEmUpdateTarefa() throws Exception {
@@ -847,6 +897,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém espaços em excesso ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeContemEspacosEmExcessoEmUpdateTarefa() throws Exception {
@@ -866,6 +917,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém espaços no início ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeContemEspacosNoInicioEmUpdateTarefa() throws Exception {
@@ -885,6 +937,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo nome quando contém espaços no final ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoNomeContemEspacosNoFinalEmUpdateTarefa() throws Exception {
@@ -904,6 +957,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando estiver vazio ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoVazioEmUpdateTarefa() throws Exception {
@@ -923,6 +977,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando estiver nulo ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoNuloEmUpdateTarefa() throws Exception {
@@ -940,11 +995,13 @@ public class TarefaControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isBadRequest());
 
-                verifyNoInteractions(tarefaService);    
+                verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando não contém apenas letras, números, espaços, pontuação básica (.,;:), hífen e barra ao atualizar tarefa")
-        public void deveRetornarErroValidacaoNoCampoDescricaoNaoContemApenasCaracteresValidosEmUpdateTarefa() throws Exception {
+        public void deveRetornarErroValidacaoNoCampoDescricaoNaoContemApenasCaracteresValidosEmUpdateTarefa()
+                        throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
                                 .descricao("Descrição da Tarefa Teste!") // Descrição inválida(o campo deve conter apenas letras, números, espaços, pontuação básica (.,;:), hífen e barra)
@@ -961,7 +1018,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-       
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando contém mistura letra-dígito proibida ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoMisturaLetraDigitoEmUpdateTarefa() throws Exception {
@@ -981,6 +1038,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando começa com pontuação inválida ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoComecaComPontoEmUpdateTarefa() throws Exception {
@@ -1000,6 +1058,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando termina com pontuação inválida ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoTerminaComPontoEmUpdateTarefa() throws Exception {
@@ -1019,7 +1078,8 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando contém pontuação sem espaço ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoPontuacaoSemEspacoEmUpdateTarefa() throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
@@ -1038,6 +1098,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando começa com espaço ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoComecaComEspacoEmUpdateTarefa() throws Exception {
@@ -1057,6 +1118,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando termina com espaço ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoTerminaComEspacoEmUpdateTarefa() throws Exception {
@@ -1076,6 +1138,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando contém espaços em excesso ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoEspacosEmExcessoEmUpdateTarefa() throws Exception {
@@ -1095,6 +1158,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando contém apenas uma letra ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoContemApenasUmaLetraEmUpdateTarefa() throws Exception {
@@ -1114,6 +1178,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de data DD/MM/AAAA inválido ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoFormatoDataInvalidoEmUpdateTarefa() throws Exception {
@@ -1133,6 +1198,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de data DD-MM-AAAA inválido ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoFormatoDataInvalidoEmUpdateTarefa2() throws Exception {
@@ -1152,6 +1218,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de hora HH:MM for inválido ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoEmUpdateTarefa() throws Exception {
@@ -1169,6 +1236,7 @@ public class TarefaControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isBadRequest());
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de hora HHhMM for inválido ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoEmUpdateTarefa2() throws Exception {
@@ -1188,6 +1256,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar erro de validação com status 400 no campo descrição quando o formato de unidade for inválido ao atualizar tarefa")
         public void deveRetornarErroValidacaoNoCampoDescricaoFormatoUnidadeInvalidoEmUpdateTarefa() throws Exception {
@@ -1207,7 +1276,8 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar requisição inválida com status 400 quando o JSON estiver mal formado ao atualizar tarefa")
         public void deveRetornarRequisicaoInvalidaQuandoJsonMalFormadoEmUpdateTarefa() throws Exception {
                 String jsonMalFormado = "{ \"nome\": \"Tarefa Teste\", \"descricao\": \"Descrição da Tarefa Teste\", \"realizado\": false,"; // JSON inválido(faltando fechamento de chaves e colchetes, além de não conter o campo prioridade)
@@ -1220,17 +1290,20 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar parametro inválido com status 400 quando o ID for inválido ao atualizar tarefa")
         public void deveRetornarParametroInvalidoQuandoIdInvalidoEmUpdateTarefa() throws Exception {
-                mockMvc.perform(put("/tarefa/999") // ID inválido(não existe mapeamento para essa URL com parâmetro não UUID)
+                mockMvc.perform(put("/tarefa/999") // ID inválido(não existe mapeamento para essa URL com parâmetro não
+                                // UUID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonPut)
                                 .accept(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isBadRequest());
-                                verifyNoInteractions(tarefaService);
+                verifyNoInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar recurso não encontrado com status 404 quando a URL estiver incorreta em updateTarefa")
         public void deveRetornarRecursoNaoEncontradoQuandoUrlEstiverIncorretaEmUpdateTarefa() throws Exception {
                 mockMvc.perform(put("/task/" + id) // URL incorreta(não existe mapeamento para essa URL)
@@ -1241,6 +1314,7 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar status 200 ao deletar uma tarefa com ID válido")
         public void deveDeletarTarefaComSucessoEmDeleteTarefa() throws Exception {
@@ -1254,7 +1328,8 @@ public class TarefaControllerTest {
                 verify(tarefaService).deleteTarefa(id);
                 verifyNoMoreInteractions(tarefaService);
         }
-        @Test 
+
+        @Test
         @DisplayName("Deve retornar tarefa não encontrada com status 404 ao deletar uma tarefa com ID válido que não existe")
         public void deveRetornarTarefaNaoEncontradaQuandoUrlEstiverIncorretaEmDeleteTarefa() throws Exception {
                 when(tarefaService.deleteTarefa(id)).thenReturn(List.of());
@@ -1267,6 +1342,7 @@ public class TarefaControllerTest {
                 verify(tarefaService).deleteTarefa(id);
                 verifyNoMoreInteractions(tarefaService);
         }
+
         @Test
         @DisplayName("Deve retornar parâmetro inválido com status 400 ao deletar uma tarefa com ID inválido")
         public void deveRetornarParametroInvalidoQuandoUrlEstiverIncorretaEmDeleteTarefa() throws Exception {
@@ -1278,8 +1354,9 @@ public class TarefaControllerTest {
 
                 verifyNoInteractions(tarefaService);
         }
+
         @Test
-        @DisplayName ("Deve retornar recurso não encontrado com status 404 quando a URL estiver incorreta em deleteTarefa")
+        @DisplayName("Deve retornar recurso não encontrado com status 404 quando a URL estiver incorreta em deleteTarefa")
         public void deveRetornarRecursoNaoEncontradoQuandoUrlEstiverIncorretaEmDeleteTarefa() throws Exception {
                 mockMvc.perform(delete("/task/" + id) // URL incorreta(não existe mapeamento para essa URL)
                                 .contentType(MediaType.APPLICATION_JSON)
