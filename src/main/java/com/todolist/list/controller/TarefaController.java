@@ -46,6 +46,9 @@ public class TarefaController {
         this.assembler = tarefaModelAssembler;
     }
 
+    @Operation(summary = "Cria uma nova tarefa", description = "Cria uma nova tarefa com base nos dados fornecidos no corpo da requisição")
+    @ApiResponse(responseCode = "201", description = "Tarefa criada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiStandardErrors
     @PostMapping
     public ResponseEntity<EntityModel<TarefaModel>> createTarefa(@RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> savedTarefas = tarefaService.saveTarefa(tarefaRecordDto);
@@ -54,6 +57,11 @@ public class TarefaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
+    @Operation(summary = "Busca todas as tarefas", description = "Retorna uma lista de todas as tarefas cadastradas")
+    @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "404", description = "Nenhuma tarefa encontrada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "405", description = "Método HTTP não permitido para o recurso solicitado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> getAllTarefas() {
         List<TarefaModel> tarefas = tarefaService.getAllTarefas();
@@ -80,6 +88,9 @@ public class TarefaController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @Operation(summary = "Atualiza uma tarefa pelo ID", description = "Atualiza os detalhes de uma tarefa específica com base no ID fornecido e nos dados fornecidos no corpo da requisição")
+    @ApiResponse(responseCode = "200", description = "Tarefa Atualizada com sucesso", content = @Content(mediaType = "appication/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiStandardErrors
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<TarefaModel>> updateTarefa(@PathVariable UUID id,
             @RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
@@ -92,6 +103,9 @@ public class TarefaController {
         return ResponseEntity.ok(entityModel);
     }
 
+    @Operation(summary = "Deleta uma tarefa pelo ID", description = "Deleta uma tarefa específica com base no ID fornecido")
+    @ApiResponse(responseCode = "200", description = "Tarefa deletada com sucesso", content = @Content(mediaType = "appication/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiStandardErrors
     @DeleteMapping("/{id}")
     public ResponseEntity<List<TarefaModel>> deleteTarefa(@PathVariable UUID id) {
         List<TarefaModel> deletedTarefa = tarefaService.deleteTarefa(id);
