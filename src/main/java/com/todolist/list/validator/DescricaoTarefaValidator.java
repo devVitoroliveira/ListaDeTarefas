@@ -167,6 +167,10 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
     }
 
     private boolean isPossivelDataHoraUnidade(String palavra) {
-        return palavra.matches(".*\\d.*") || palavra.matches(".*[h/:].*") || palavra.matches(".*(kg|g|m|cm|un|L).*");
+        return palavra.matches("^\\d{2}-\\d{2}-\\d{4}$")
+                || palavra.matches("^\\d{2}/\\d{2}/\\d{4}$")
+                || palavra.matches("^\\d{1,2}h\\d{0,2}$")
+                || palavra.matches("^\\d{1,2}:\\d{2}$")
+                || palavra.matches("^\\d+(kg|g|m|cm|un|L)$");
     }
 }
