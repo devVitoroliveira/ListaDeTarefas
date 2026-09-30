@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.list.configuration.ApiStandardErrors;
+import com.todolist.list.dto.TarefaCollectionResponseDto;
 import com.todolist.list.dto.TarefaRecordDto;
 import com.todolist.list.dto.TarefaResponseDto;
+import com.todolist.list.exceptions.StandardError;
 import com.todolist.list.model.TarefaModel;
 import com.todolist.list.model.TarefaModelAssembler;
 import com.todolist.list.service.TarefaService;
@@ -47,21 +49,22 @@ public class TarefaController {
     }
 
     @Operation(summary = "Cria uma nova tarefa", description = "Cria uma nova tarefa com base nos dados fornecidos no corpo da requisição")
-    @ApiResponse(responseCode = "201", description = "Tarefa criada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "201", description = "Tarefa criada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaCollectionResponseDto.class)))
     @ApiStandardErrors
     @PostMapping
-    public ResponseEntity<EntityModel<TarefaModel>> createTarefa(@RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
+    public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> createTarefa(
+            @RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> savedTarefas = tarefaService.saveTarefa(tarefaRecordDto);
-        EntityModel<TarefaModel> entityModel = assembler.toModel(savedTarefas.get(0));
+        CollectionModel<EntityModel<TarefaModel>> entityModel = assembler.toCollectionModel(savedTarefas);
         entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
         return ResponseEntity.status(HttpStatus.CREATED).body(entityModel);
     }
 
     @Operation(summary = "Busca todas as tarefas", description = "Retorna uma lista de todas as tarefas cadastradas")
-    @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
-    @ApiResponse(responseCode = "404", description = "Nenhuma tarefa encontrada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
-    @ApiResponse(responseCode = "405", description = "Método HTTP não permitido para o recurso solicitado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
-    @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaCollectionResponseDto.class)))
+    @ApiResponse(responseCode = "404", description = "Nenhuma tarefa encontrada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
+    @ApiResponse(responseCode = "405", description = "Método HTTP não permitido para o recurso solicitado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
+    @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(mediaType = "application/json", schema = @Schema(implementation = StandardError.class)))
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> getAllTarefas() {
         List<TarefaModel> tarefas = tarefaService.getAllTarefas();
@@ -89,29 +92,31 @@ public class TarefaController {
     }
 
     @Operation(summary = "Atualiza uma tarefa pelo ID", description = "Atualiza os detalhes de uma tarefa específica com base no ID fornecido e nos dados fornecidos no corpo da requisição")
-    @ApiResponse(responseCode = "200", description = "Tarefa Atualizada com sucesso", content = @Content(mediaType = "appication/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "200", description = "Tarefa Atualizada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaCollectionResponseDto.class)))
     @ApiStandardErrors
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<TarefaModel>> updateTarefa(@PathVariable UUID id,
+    public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> updateTarefa(@PathVariable UUID id,
             @RequestBody @Valid TarefaRecordDto tarefaRecordDto) {
         List<TarefaModel> updatedTarefa = tarefaService.updateTarefa(id, tarefaRecordDto);
         if (updatedTarefa.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        EntityModel<TarefaModel> entityModel = assembler.toModel(updatedTarefa.get(0));
+        CollectionModel<EntityModel<TarefaModel>> entityModel = assembler.toCollectionModel(updatedTarefa);
         entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
         return ResponseEntity.ok(entityModel);
     }
 
     @Operation(summary = "Deleta uma tarefa pelo ID", description = "Deleta uma tarefa específica com base no ID fornecido")
-    @ApiResponse(responseCode = "200", description = "Tarefa deletada com sucesso", content = @Content(mediaType = "appication/json", schema = @Schema(implementation = TarefaResponseDto.class)))
+    @ApiResponse(responseCode = "200", description = "Tarefa deletada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = TarefaCollectionResponseDto.class)))
     @ApiStandardErrors
     @DeleteMapping("/{id}")
-    public ResponseEntity<List<TarefaModel>> deleteTarefa(@PathVariable UUID id) {
+    public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> deleteTarefa(@PathVariable UUID id) {
         List<TarefaModel> deletedTarefa = tarefaService.deleteTarefa(id);
         if (deletedTarefa.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(deletedTarefa);
+        CollectionModel<EntityModel<TarefaModel>> entityModel = assembler.toCollectionModel(deletedTarefa);
+        entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
+        return ResponseEntity.ok(entityModel);
     }
 }

@@ -18,9 +18,13 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
     // Formato de hora permitido
     private static final Pattern HORA = Pattern.compile("\\d{1,2}[h:]\\d{0,2}");
 
+    private static final Pattern HORA_AM_PM_COM_VIRGULA = Pattern.compile("\\b\\d{1,2},\\d{2}\\s+(?i:am|pm)\\b");
+
     // Número seguido de UNIDADES ESPECÍFICAS (lista restrita)
     // Ex.: 2kg, 100g, 5m, 10cm, 3un, 1L
     private static final Pattern NUMERO_UNIDADE = Pattern.compile("\\d+(kg|g|m|cm|un|L)");
+
+    private static final Pattern NUMERO_UNIDADE_COM_ESPACO = Pattern.compile("\\b\\d+\\s+(?:kg|g|cm|m|un|L)\\b");
 
     // Mistura letra-dígito
     private static final Pattern MISTURA_LETRA_DIGITO = Pattern.compile("\\p{L}\\d|\\d\\p{L}");
@@ -67,6 +71,13 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
                         .addConstraintViolation();
                 return false;
             }
+        }
+        if (HORA_AM_PM_COM_VIRGULA.matcher(value).find()) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    "Horário inválido. Use o formato HH:MM ou HHhMM.")
+                    .addConstraintViolation();
+            return false;
         }
 
         // Verificação 2: para cada palavra, checar se contém mistura letra-dígito proibida
@@ -117,6 +128,13 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
                 }
             }
 
+        }
+        if (NUMERO_UNIDADE_COM_ESPACO.matcher(value).find()) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                    "Formato de unidade inválido. Escreva o número junto à unidade, como 2kg.")
+                    .addConstraintViolation();
+            return false;
         }
 
         // Verificação 4: espaços em excesso

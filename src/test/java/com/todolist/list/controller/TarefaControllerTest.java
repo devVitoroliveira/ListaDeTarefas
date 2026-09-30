@@ -91,7 +91,8 @@ public class TarefaControllerTest {
         @DisplayName("Deve retornar a tarefa salva com status 201 ao salvar tarefa em post")
         public void deveRetornarTarefaSalvaEmPost() throws Exception {
                 when(tarefaService.saveTarefa(tarefaRecordDto)).thenReturn(List.of(tarefaModel));
-                when(tarefaModelAssembler.toModel(tarefaModel)).thenReturn(EntityModel.of(tarefaModel));
+                when(tarefaModelAssembler.toCollectionModel(List.of(tarefaModel)))
+                                .thenReturn(CollectionModel.of(List.of(EntityModel.of(tarefaModel))));
 
                 mockMvc.perform(post(url)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +102,7 @@ public class TarefaControllerTest {
                                 .andExpect(jsonPath("$._links.all-tarefas.href").exists());
 
                 verify(tarefaService).saveTarefa(tarefaRecordDto);
-                verify(tarefaModelAssembler).toModel(tarefaModel);
+                verify(tarefaModelAssembler).toCollectionModel(List.of(tarefaModel));
                 verifyNoMoreInteractions(tarefaService, tarefaModelAssembler);
         }
 
@@ -576,7 +577,7 @@ public class TarefaControllerTest {
                         throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
-                                .descricao("Descrição da Tarefa Teste no dia 22/02/2022 às 10h30 am") // Descrição com hora inválida(o campo deve conter hora no formato HHhMM)
+                                .descricao("Descrição da Tarefa Teste no dia 22/02/2022 às 10,30 am") // Descrição com hora inválida(o campo deve conter hora no formato HHhMM)
                                 .realizado(false)
                                 .prioridade(3)
                                 .build();
@@ -784,22 +785,24 @@ public class TarefaControllerTest {
 
                 when(tarefaService.updateTarefa(id, tarefaRecordDtoatualizado))
                                 .thenReturn(List.of(tarefaModelAtualizado));
-                when(tarefaModelAssembler.toModel(tarefaModelAtualizado))
-                                .thenReturn(EntityModel.of(tarefaModelAtualizado));
+                when(tarefaModelAssembler.toCollectionModel(List.of(tarefaModelAtualizado)))
+                                .thenReturn(CollectionModel.of(List.of(EntityModel.of(tarefaModelAtualizado))));
 
                 mockMvc.perform(put("/tarefa/" + id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonPut)
                                 .accept(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.nome").value("Tarefa Teste Atualizada"))
-                                .andExpect(jsonPath("$.descricao").value("Descrição da Tarefa Teste Atualizada"))
-                                .andExpect(jsonPath("$.realizado").value(true))
-                                .andExpect(jsonPath("$.prioridade").value(2))
+                                .andExpect(jsonPath("$._embedded.tarefaModelList[0].nome")
+                                                .value("Tarefa Teste Atualizada"))
+                                .andExpect(jsonPath("$._embedded.tarefaModelList[0]descricao")
+                                                .value("Descrição da Tarefa Teste Atualizada"))
+                                .andExpect(jsonPath("$._embedded.tarefaModelList[0]realizado").value(true))
+                                .andExpect(jsonPath("$._embedded.tarefaModelList[0]prioridade").value(2))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$._links.all-tarefas.href").exists());
 
                 verify(tarefaService).updateTarefa(id, tarefaRecordDtoatualizado);
-                verify(tarefaModelAssembler).toModel(tarefaModelAtualizado);
+                verify(tarefaModelAssembler).toCollectionModel(List.of(tarefaModelAtualizado));
                 verifyNoMoreInteractions(tarefaService, tarefaModelAssembler);
         }
 
@@ -1242,7 +1245,7 @@ public class TarefaControllerTest {
         public void deveRetornarErroValidacaoNoCampoDescricaoFormatoHoraInvalidoEmUpdateTarefa2() throws Exception {
                 TarefaRecordDto tarefaRecordDtoInvalido = TarefaRecordDto.builder()
                                 .nome("Tarefa Teste")
-                                .descricao("Descrição da Tarefa Teste no dia 22/02/2022 as 10h30 am") // Descrição com formato de hora inválido(o campo deve conter hora no formato HH:MM)
+                                .descricao("Descrição da Tarefa Teste no dia 22/02/2022 as 10,30 am") // Descrição com formato de hora inválido(o campo deve conter hora no formato HHhMM)
                                 .realizado(false)
                                 .prioridade(3)
                                 .build();
@@ -1319,6 +1322,8 @@ public class TarefaControllerTest {
         @DisplayName("Deve retornar status 200 ao deletar uma tarefa com ID válido")
         public void deveDeletarTarefaComSucessoEmDeleteTarefa() throws Exception {
                 when(tarefaService.deleteTarefa(id)).thenReturn(List.of(tarefaModel));
+                when(tarefaModelAssembler.toCollectionModel(List.of(tarefaModel)))
+                                .thenReturn(CollectionModel.of(List.of(EntityModel.of(tarefaModel))));
                 mockMvc.perform(delete("/tarefa/" + id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonPut)
