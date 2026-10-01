@@ -12,14 +12,17 @@ jobs:
 
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Configurar JDK 26
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: "26"
           distribution: "temurin"
           cache: maven
+
+      - name: Dar permissão de execução ao mvnw
+        run: chmod +x mvnw
 
       - name: Rodar testes
         run: ./mvnw clean test
