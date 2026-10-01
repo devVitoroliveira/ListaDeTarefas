@@ -1,5 +1,7 @@
 # Lista de Tarefas API
 
+![CI](https://github.com/devVitoroliveira/ListaDeTarefas/actions/workflows/ci.yml/badge.svg)
+
 API para gerenciamento de tarefas com hipermídias (HATEOAS), documentação (Swagger), validações personalizadas e tratamento de exceções.
 
 ![alt text](animacao.gif)
