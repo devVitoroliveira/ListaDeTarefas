@@ -350,9 +350,10 @@ CREATE DATABASE "TodoList";
 Configure as credenciais em src/main/resources/application.properties
 
 ```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/TodoList
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
+# Se as variáveis de ambiente não estiverem definidas, os valores padrão (localhost) são usados
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/TodoList}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:1234}
 ```
 
 Nota: as tabelas são criadas automaticamente pelo Hibernate (ddl-auto=update).
