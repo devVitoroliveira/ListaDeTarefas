@@ -36,10 +36,11 @@ API para gerenciamento de tarefas com hipermídias (HATEOAS), documentação (Sw
 ```bash
 curl -X POST http://localhost:8080/tarefa \
   -H "Content-Type: application/json" \
-  -d '{"nome":"Comprar pao","descricao":"Comprar pao na padaria","realizado":false,"prioridade":3}'
+  -d '{"nome":"Academia","descricao":"Treino de pernas","realizado":false,"prioridade":1}'
+```
 
-[
- {
+```json
+{
   "_embedded": {
     "tarefaModelList": [
       {
@@ -62,30 +63,30 @@ curl -X POST http://localhost:8080/tarefa \
       }
     ]
   }
- }
-]
+}
 ```
 
 ### Listar Tarefas
 
 ```bash
 curl http://localhost:8080/tarefa
+```
 
- [
-    {
+```json
+{
   "_embedded": {
     "tarefaModelList": [
       {
         "_links": {
           "self": {
             "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
-            },
+          },
           "update-tarefa": {
             "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
-            },
+          },
           "delete-tarefa": {
             "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
-            }
+          }
         },
         "nome": "Academia",
         "descricao": "Treino de pernas",
@@ -136,15 +137,16 @@ curl http://localhost:8080/tarefa
     "create-tarefa": { "href": "http://localhost:8080/tarefa" }
   }
 }
-  ]
 ```
 
 ### Buscar Tarefa por ID
 
 ```bash
 curl http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9
-[
-   {
+```
+
+```json
+{
   "_links": {
     "self": {
       "href": "http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9"
@@ -164,8 +166,7 @@ curl http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9
   "realizado": false,
   "prioridade": 3,
   "id": "eba75e58-bec5-4a75-a2de-d7ed1eaabea9"
-   }
-]
+}
 ```
 
 ### Atualizar Tarefa
@@ -174,22 +175,23 @@ curl http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9
 curl -X PUT http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9 \
   -H "Content-Type: application/json" \
   -d '{"nome":"Comprar pao atualizado","descricao":"Comprar pao na padaria","realizado":true,"prioridade":2}'
+```
 
-  [
-    {
+```json
+{
   "_embedded": {
     "tarefaModelList": [
       {
         "_links": {
           "self": {
             "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
-            },
+          },
           "update-tarefa": {
             "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
-            },
+          },
           "delete-tarefa": {
             "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
-            }
+          }
         },
         "nome": "Academia",
         "descricao": "Treino de pernas",
@@ -240,27 +242,28 @@ curl -X PUT http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9 \
     "create-tarefa": { "href": "http://localhost:8080/tarefa" }
   }
 }
-  ]
 ```
 
 ### Deletar Tarefa
 
 ```bash
 curl -X DELETE http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9
-[
+```
+
+```json
 {
   "_embedded": {
     "tarefaModelList": [
       {
         "_links": {
           "self": {
-          "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
+            "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
           },
           "update-tarefa": {
-          "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
+            "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
           },
           "delete-tarefa": {
-          "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
+            "href": "http://localhost:8080/tarefa/69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
           }
         },
         "nome": "Academia",
@@ -270,7 +273,7 @@ curl -X DELETE http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9
         "id": "69d0bdfe-3e21-4fbf-ad41-3ea18a8c832f"
       },
       {
-         "_links": {
+        "_links": {
           "self": {
             "href": "http://localhost:8080/tarefa/d195eb88-9704-4a22-8b61-3c4b9b1ddf98"
           },
@@ -293,7 +296,6 @@ curl -X DELETE http://localhost:8080/tarefa/eba75e58-bec5-4a75-a2de-d7ed1eaabea9
     "all-tarefas": { "href": "http://localhost:8080/tarefa" }
   }
 }
-]
 ```
 
 ## 🧠 Práticas adotadas
@@ -394,6 +396,15 @@ O projeto conta com testes unitários para as camadas de **Service** e **Control
 - Mockito
 - AssertJ
 - Spring MockMvc
+
+## 📊 Observabilidade
+
+O projeto usa **Spring Boot Actuator** para expor endpoints de monitoramento:
+
+- `GET /actuator/health` — status da aplicação e do banco de dados.
+- `GET /actuator/info` — informações do projeto.
+
+Esses endpoints permitem que a aplicação seja monitorada em produção, facilitando a detecção de problemas e a integração com ferramentas de orquestração.
 
 ## 📖 Documentação da API
 
