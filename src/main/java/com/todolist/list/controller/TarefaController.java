@@ -68,9 +68,6 @@ public class TarefaController {
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> getAllTarefas() {
         List<TarefaModel> tarefas = tarefaService.getAllTarefas();
-        if (tarefas.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         CollectionModel<EntityModel<TarefaModel>> collection = assembler.toCollectionModel(tarefas);
         collection.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withSelfRel());
         collection.add(linkTo(methodOn(TarefaController.class).createTarefa(null)).withRel("create-tarefa"));
@@ -112,9 +109,6 @@ public class TarefaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<CollectionModel<EntityModel<TarefaModel>>> deleteTarefa(@PathVariable UUID id) {
         List<TarefaModel> deletedTarefa = tarefaService.deleteTarefa(id);
-        if (deletedTarefa.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
         CollectionModel<EntityModel<TarefaModel>> entityModel = assembler.toCollectionModel(deletedTarefa);
         entityModel.add(linkTo(methodOn(TarefaController.class).getAllTarefas()).withRel("all-tarefas"));
         return ResponseEntity.ok(entityModel);

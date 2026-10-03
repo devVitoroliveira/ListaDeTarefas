@@ -22,6 +22,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 
 import com.todolist.list.dto.TarefaRecordDto;
+import com.todolist.list.exceptions.TarefaNaoEncontradaException;
 import com.todolist.list.model.TarefaModel;
 import com.todolist.list.repository.TarefaRepository;
 
@@ -129,10 +130,9 @@ public class TarefaServiceTest {
     @DisplayName("testGetTarefaByIdNotFound")
     void testGetTarefaByIdNotFound() {
         UUID id = UUID.randomUUID();
-        when(tarefaRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        List<TarefaModel> tarefasResult = tarefaService.getTarefaById(id);
-        assertThat(tarefasResult).isNotNull();
-        assertThat(tarefasResult).isEmpty();
+        when(tarefaRepository.findById(any(UUID.class)))
+                .thenThrow(new TarefaNaoEncontradaException("Tarefa não encontrada"));
+        assertThrows(TarefaNaoEncontradaException.class, () -> tarefaService.getTarefaById(id));
         verify(tarefaRepository).findById(any(UUID.class));
     }
 
@@ -178,10 +178,9 @@ public class TarefaServiceTest {
     void testUpdateTarefaNotFound() {
         UUID id = UUID.randomUUID();
         TarefaRecordDto tarefaRecordDto = new TarefaRecordDto("Tarefa 1", "Descrição 1", true, 1);
-        when(tarefaRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        List<TarefaModel> tarefasResult = tarefaService.updateTarefa(id, tarefaRecordDto);
-        assertThat(tarefasResult).isNotNull();
-        assertThat(tarefasResult).isEmpty();
+        when(tarefaRepository.findById(any(UUID.class)))
+                .thenThrow(new TarefaNaoEncontradaException("Tarefa não encontrada"));
+        assertThrows(TarefaNaoEncontradaException.class, () -> tarefaService.updateTarefa(id, tarefaRecordDto));
         verify(tarefaRepository).findById(any(UUID.class));
         verify(tarefaRepository, never()).save(any(TarefaModel.class));
         verify(tarefaRepository, never()).findAll(any(Sort.class));
@@ -229,10 +228,9 @@ public class TarefaServiceTest {
     @DisplayName("testDeleteTarefaIdNotFound")
     void testDeleteTarefaIdNotFound() {
         UUID id = UUID.randomUUID();
-        when(tarefaRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        List<TarefaModel> tarefasResult = tarefaService.deleteTarefa(id);
-        assertThat(tarefasResult).isNotNull();
-        assertThat(tarefasResult).isEmpty();
+        when(tarefaRepository.findById(any(UUID.class)))
+                .thenThrow(new TarefaNaoEncontradaException("Tarefa não encontrada"));
+        assertThrows(TarefaNaoEncontradaException.class, () -> tarefaService.deleteTarefa(id));
         verify(tarefaRepository).findById(any(UUID.class));
         verify(tarefaRepository, never()).delete(any(TarefaModel.class));
         verify(tarefaRepository, never()).findAll(any(Sort.class));

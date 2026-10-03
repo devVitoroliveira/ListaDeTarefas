@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.todolist.list.dto.TarefaRecordDto;
+import com.todolist.list.exceptions.TarefaNaoEncontradaException;
 import com.todolist.list.model.TarefaModel;
 import com.todolist.list.repository.TarefaRepository;
 
@@ -39,7 +40,7 @@ public class TarefaService {
             TarefaModel tarefa = tarefaOptional.get();
             return List.of(tarefa);
         } else {
-            return List.of();
+            throw new TarefaNaoEncontradaException("Tarefa com ID " + id + " não encontrada.");
         }
     }
 
@@ -51,7 +52,7 @@ public class TarefaService {
             tarefaRepository.save(tarefaToUpdate);
             return getAllTarefas();
         } else {
-            return List.of();
+            throw new TarefaNaoEncontradaException("Tarefa com ID " + id + " não encontrada.");
         }
     }
 
@@ -62,7 +63,7 @@ public class TarefaService {
             tarefaRepository.delete(tarefaToDelete);
             return getAllTarefas();
         } else {
-            return List.of();
+            throw new TarefaNaoEncontradaException("Tarefa com ID " + id + " não encontrada.");
         }
     }
 }

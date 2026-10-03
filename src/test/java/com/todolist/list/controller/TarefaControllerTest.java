@@ -690,7 +690,7 @@ public class TarefaControllerTest {
         }
 
         @Test
-        @DisplayName("Deve retornar tarefa não encontrada com status 404 quando não houver tarefas cadastradas em getAll")
+        @DisplayName("Deve retornar uma lista vazia com status 200 quando não houver tarefas cadastradas em getAll")
         public void deveRetornarTarefaNaoEncontradaEmGetAll() throws Exception {
                 when(tarefaService.getAllTarefas()).thenReturn(List.of());
                 when(tarefaModelAssembler.toCollectionModel(List.of())).thenReturn(CollectionModel.of(List.of()));
@@ -699,7 +699,7 @@ public class TarefaControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonPost)
                                 .accept(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isNotFound());
+                                .andExpect(status().isOk());
 
                 verify(tarefaService).getAllTarefas();
                 verifyNoMoreInteractions(tarefaService);
@@ -1335,14 +1335,15 @@ public class TarefaControllerTest {
         }
 
         @Test
-        @DisplayName("Deve retornar tarefa não encontrada com status 404 ao deletar uma tarefa com ID válido que não existe")
+        @DisplayName("Deve retornar uma lista vazia com status 200 ao deletar uma tarefa com ID válido que não existe")
         public void deveRetornarTarefaNaoEncontradaQuandoUrlEstiverIncorretaEmDeleteTarefa() throws Exception {
                 when(tarefaService.deleteTarefa(id)).thenReturn(List.of());
+                when(tarefaModelAssembler.toCollectionModel(List.of())).thenReturn(CollectionModel.of(List.of()));
                 mockMvc.perform(delete("/tarefa/" + id)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonPost)
                                 .accept(MediaType.APPLICATION_JSON))
-                                .andExpect(status().isNotFound());
+                                .andExpect(status().isOk());
 
                 verify(tarefaService).deleteTarefa(id);
                 verifyNoMoreInteractions(tarefaService);
