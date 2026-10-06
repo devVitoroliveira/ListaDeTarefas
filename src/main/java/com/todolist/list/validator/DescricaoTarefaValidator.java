@@ -178,12 +178,6 @@ public class DescricaoTarefaValidator implements ConstraintValidator<DescricaoTa
                 NUMERO_UNIDADE.matcher(palavra).matches();
     }
 
-    private boolean palavraSuspeita(String palavra) {
-        return MISTURA_LETRA_DIGITO.matcher(palavra).find() || PONTUACAO_SEM_ESPACO.matcher(palavra).find()
-                || palavra.contains("  ") || palavra.startsWith(" ") || palavra.endsWith(" ")
-                || LETRA_UNICA.matcher(palavra).matches();
-    }
-
     private boolean isPossivelDataHoraUnidade(String palavra) {
         return palavra.matches("^\\d{2}-\\d{2}-\\d{4}$")
                 || palavra.matches("^\\d{2}/\\d{2}/\\d{4}$")
