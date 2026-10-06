@@ -4,6 +4,15 @@
 
 API para gerenciamento de tarefas com hipermídias (HATEOAS), documentação (Swagger), validações personalizadas e tratamento de exceções.
 
+## 🌐 API Online
+
+A API está disponível em produção:
+
+- **Swagger UI:** https://listadetarefas-5ylc.onrender.com/swagger-ui.html
+- **Health check:** https://listadetarefas-5ylc.onrender.com/actuator/health
+
+> **Nota:** no plano gratuito do Render, a aplicação hiberna após 15 minutos de inatividade. A primeira requisição pode levar até 50 segundos para responder.
+
 ![alt text](animacao.gif)
 
 ## 🔨 Tecnologias
