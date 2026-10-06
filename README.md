@@ -337,7 +337,7 @@ Os testes ficam em `src/test/java/com/todolist/list/`, nas pastas `controller/` 
 
 ### Pré-requisitos
 
-- Java 26
+- Java 21
 - PostgreSQL 18
 - (Opcional) Git
 
